@@ -65,3 +65,5 @@ this will:
 - clone odpi repo
 - compile
 - run all the test
+
+Sample run [log here](https://gist.github.com/kikitux/01642587d88a54137724546e39cf24cb)
