@@ -1,0 +1,103 @@
+{
+  "variables": {
+    "ssh_name": "root",
+    "ssh_pass": "oracle",
+    "vm_name": "xe",
+    "compression": "9"
+  },
+  "builders": [
+    {
+      "name": "virtualbox",
+      "type": "virtualbox-ovf",
+      "guest_additions_mode": "disable",
+      "source_path": "http://download.oracle.com/otn-pub/otn_software/linux/DOC-1002902.ova",
+      "checksum": "dd3cf43dae8d34e41baab99860dec5ee",
+      "checksum_type": "md5",
+      "output_directory": "output-{{user `vm_name`}}",
+      "vm_name": "{{user `vm_name`}}",
+      "import_flags": [
+        "--eula",
+        "accept"
+      ],
+      "headless": 0,
+      "ssh_username": "{{user `ssh_name`}}",
+      "ssh_password": "{{user `ssh_pass`}}",
+      "ssh_wait_timeout": "40m",
+      "shutdown_command": "shutdown -h now",
+      "shutdown_timeout": "40m"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "sh '{{ .Path }}'",
+      "pause_before": "1s",
+      "inline": [
+        "systemctl set-default multi-user.target",
+        "curl -o /etc/yum.repos.d/public-yum-ol7.repo http://public-yum.oracle.com/public-yum-ol7.repo",
+        "rpm -q yum-utils || yum install -y yum-utils",
+        "yum-config-manager --enable ol7_addons",
+        "yum-config-manager --enable ol7_optional_latest",
+        "yum-config-manager --enable ol7_UEKR3",
+        "yum-config-manager --enable ol7_UEKR4",
+        "yum update -y kernel*",
+        "yum install -y oracle*preinstall",
+        "yum clean packages",
+        "reboot"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "sw/oracle-xe-11.2.0-1.0.x86_64.rpm",
+      "destination": "/tmp/"
+    },
+    {
+      "type": "shell",
+      "execute_command": "sh '{{ .Path }}'",
+      "pause_before": "1s",
+      "inline": [
+        "cd /tmp/",
+        "yum install -y git gcc gcc-c++",
+        "yum localinstall -y oracle-xe-11.2.0-1.0.x86_64.rpm",
+        "rm oracle-xe-11.2.0-1.0.x86_64.rpm"
+      ]
+    },
+    {
+      "type": "shell",
+      "execute_command": "sh '{{ .Path }}'",
+      "pause_before": "10s",
+      "inline": [
+        "yum clean all",
+        "[ -d /var/cache/yum ] && rm -fr /var/cache/yum",
+        "[ -f /etc/init.d/vboxadd ] && /etc/init.d/vboxadd setup || true",
+        "useradd vagrant",
+        "cp /etc/sudoers /etc/sudoers.orig",
+        "sed -i -e 's/Defaults\\s*requiretty$/#Defaults\trequiretty/' /etc/sudoers",
+        "sed -i -e '/# %wheel\tALL=(ALL)\tNOPASSWD: ALL/a %vagrant\tALL=(ALL)\tNOPASSWD: ALL' /etc/sudoers",
+        "mkdir ~vagrant/.ssh",
+        "chmod 700 ~vagrant/.ssh",
+        "echo 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key' > ~vagrant/.ssh/authorized_keys",
+        "chmod 600 ~vagrant/.ssh/authorized_keys",
+        "chown -R vagrant: ~vagrant/.ssh",
+        "cp /etc/ssh/sshd_config /etc/ssh/sshd_config.ori",
+        "sed -i -e '/#UseDNS yes/a UseDNS no' /etc/ssh/sshd_config",
+        "for nic in /etc/sysconfig/network-scripts/ifcfg-*; do sed -i /HWADDR/d $nic; sed -i /UUID/d $nic || true ; done",
+        "[ -f /etc/udev/rules.d/70-persistent-net.rules ] && rm /etc/udev/rules.d/??-persistent-net.rules",
+        "[ -d /var/vache/yum ] && rm -fr /var/cache/yum",
+        "history -c",
+        "true"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "only": [
+        "virtualbox"
+      ],
+      "keep_input_artifact": false,
+      "output": "{{user `vm_name`}}.box",
+      "compression_level": "{{user `compression`}}"
+    }
+  ]
+}

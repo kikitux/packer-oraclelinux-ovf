@@ -1,0 +1,15 @@
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/bin
+PATH=$PATH:/u01/app/oracle/product/11.2.0/xe/bin
+export PATH
+
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/oracle/odpi/lib:/u01/app/oracle/product/11.2.0/xe/lib
+export LD_LIBRARY_PATH

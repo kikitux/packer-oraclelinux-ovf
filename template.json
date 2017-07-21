@@ -39,9 +39,8 @@
       "yum-config-manager --enable ol7_UEKR3",
       "yum-config-manager --enable ol7_UEKR4",
       "yum update -y kernel*",
-      "yum clean all",
-      "[ -d /var/cache/yum ] && rm -fr /var/cache/yum",
       "yum install -y oracle*preinstall",
+      "yum clean packages",
       "reboot"
        ]
   },
@@ -50,6 +49,8 @@
     "execute_command": "sh '{{ .Path }}'",
     "pause_before": "10s",
     "inline": [
+      "yum clean all",
+      "[ -d /var/cache/yum ] && rm -fr /var/cache/yum",
       "[ -f /etc/init.d/vboxadd ] && /etc/init.d/vboxadd setup || true",
       "useradd vagrant",
       "cp /etc/sudoers /etc/sudoers.orig",
