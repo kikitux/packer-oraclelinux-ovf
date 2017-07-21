@@ -4,6 +4,9 @@ POC of packer using virtualbox-ovf that allow us start from an existing box.
 
 read about packer [virtualbox-ovf here](https://www.packer.io/docs/builders/virtualbox-ovf.html)
 
+requirements:
+- [packer](https://packer.io)
+- [vagrant](https://vagrantup.com)
 
 how to use:
 
