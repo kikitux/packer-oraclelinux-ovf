@@ -27,16 +27,16 @@ There is a packer box for oracle-xe database (Express)
 
 download `oracle-xe` 11.2 rpm and place it on `sw/oracle-xe-11.2.0-1.0.x86_64.rpm`
 
+using packer, we will create a local vagrant box `xe.box` with our rpm installed.
 
 ### Packer
-
 ```
 packer build xe.json
 ```
 
 ### Vagrant
-Test 
 
+on first vagrant up, our db will be configured.
 ```
 cd vagrant/xe
 vagrant up
@@ -46,11 +46,22 @@ vagrant up
 
 Using the same `xe` box, there is a sample aplication, oracle odpi C/CPP driver.
 
+### Packer
+```
+packer build xe.json
+```
+
 ### Vagrant
-Test 
+
+on first vagrant up, our db will be configured.
 
 ```
 cd vagrant/odpi
 vagrant up
 ```
 
+this will:
+- configure xe database
+- clone odpi repo
+- compile
+- run all the test
