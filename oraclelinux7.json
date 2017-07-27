@@ -1,0 +1,65 @@
+{
+    "variables": {
+        "ssh_name": "vagrant",
+        "ssh_pass": "vagrant",
+        "vm_name": "oraclelinux7",
+	"compression" : "9"
+    },
+
+    "builders": [{
+        "name": "virtualbox",
+        "type": "virtualbox-ovf",
+        "guest_additions_mode": "disable",
+        "source_path": "https://github.com/kikitux/packer-oracle-ovf/releases/download/2017.08/oraclelinux7.ova",
+        "checksum": "eca5c45982f0cfe39cb43068914194ad",
+        "checksum_type": "md5",
+        "output_directory": "output-{{user `vm_name`}}",
+        "vm_name": "{{user `vm_name`}}",
+        "import_flags": [ "--eula", "accept" ],
+	"headless": 0,
+        "guest_additions_mode": "disable",
+        "ssh_username": "{{user `ssh_name`}}",
+        "ssh_password": "{{user `ssh_pass`}}",
+        "ssh_wait_timeout": "40m",
+        "shutdown_command": "sudo /sbin/shutdown -h now",
+        "shutdown_timeout": "40m"
+    }
+    ],
+  "provisioners"             : [
+    {
+    "type": "shell",
+    "execute_command": "sudo sh '{{ .Path }}'",
+    "pause_before": "1s",
+    "inline": [
+      "yum update -y kernel*",
+      "yum install -y git oracle*preinstall",
+      "yum clean packages",
+      "reboot"
+       ]
+  },
+    {
+    "type": "shell",
+    "execute_command": "sudo sh '{{ .Path }}'",
+    "pause_before": "10s",
+    "inline": [
+      "yum clean all",
+      "[ -d /var/cache/yum ] && rm -fr /var/cache/yum",
+      "[ -f /etc/init.d/vboxadd ] && /etc/init.d/vboxadd setup || true",
+      "for nic in /etc/sysconfig/network-scripts/ifcfg-*; do sed -i /HWADDR/d $nic; sed -i /UUID/d $nic || true ; done",
+      "[ -f /etc/udev/rules.d/70-persistent-net.rules ] && rm /etc/udev/rules.d/??-persistent-net.rules",
+      "[ -d /var/vache/yum ] && rm -fr /var/cache/yum",
+      "history -c",
+      "true"
+       ]
+  }
+],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "only": ["virtualbox"],
+      "keep_input_artifact": false,
+      "output": "{{user `vm_name`}}.box",
+      "compression_level": "{{user `compression`}}"
+    }
+  ]
+}
