@@ -1,4 +1,4 @@
-# packer-oracle-ovf
+# packer-oraclelinux-ovf
 
 POC of packer using virtualbox-ovf that allow us start from an existing box.
 
