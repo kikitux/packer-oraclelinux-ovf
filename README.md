@@ -11,7 +11,8 @@ requirements:
 how to use:
 
 ```
-packer build template.json
+packer build oraclelinux7.json
+cd vagrant/default
 vagrant up
 ```
 
@@ -19,7 +20,7 @@ Packer will download the ova, and run the provisioning scripts defined in the te
 At the end, it will create `oraclelinux7.box` file that can be used with vagrant.
 
 This example used the ova box available here:
-https://github.com/kikitux/packer-oracleilinux-ovf/releases
+https://github.com/kikitux/packer-oraclelinux-ovf/releases
 
 ## xe
 
