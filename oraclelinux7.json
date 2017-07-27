@@ -10,7 +10,7 @@
         "name": "virtualbox",
         "type": "virtualbox-ovf",
         "guest_additions_mode": "disable",
-        "source_path": "https://github.com/kikitux/packer-oracle-ovf/releases/download/2017.08/oraclelinux7.ova",
+        "source_path": "https://github.com/kikitux/packer-oraclelinux-ovf/releases/download/2017.08/oraclelinux7.ova",
         "checksum": "eca5c45982f0cfe39cb43068914194ad",
         "checksum_type": "md5",
         "output_directory": "output-{{user `vm_name`}}",
