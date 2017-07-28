@@ -1,8 +1,8 @@
 before_install:
-- mkdir -p /usr/local/bin
-- cd /usr/local/bin
+- mkdir -p ~/bin
+- cd ~/bin
 - curl -o packer.zip https://releases.hashicorp.com/packer/1.0.3/packer_1.0.3_linux_amd64.zip
 - unzip packer_1.0.3_linux_amd64.zip
 - chmod +x packer
 script:
-- for template in *.json ; do packer validate ${template}; done
+- for template in *.json ; do ~/bin/packer validate ${template}; done
