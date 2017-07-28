@@ -1,5 +1,5 @@
 language: generic
-before_install:
+install:
 - mkdir -p ~/bin
 - cd ~/bin
 - echo will download packer ${PACKERVER}
@@ -7,5 +7,7 @@ before_install:
 - unzip packer.zip
 - chmod +x packer
 - cd -
+before_script:
+- touch sw/oracle-xe-11.2.0-1.0.x86_64.rpm
 script:
 - for template in *.json ; do ~/bin/packer validate ${template}; done
