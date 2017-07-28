@@ -7,6 +7,7 @@ read about packer [virtualbox-ovf here](https://www.packer.io/docs/builders/virt
 requirements:
 - [packer](https://packer.io)
 - [vagrant](https://vagrantup.com)
+- oracle-xe 11.2 rpm and place it on `sw/oracle-xe-11.2.0-1.0.x86_64.rpm`
 
 ## how to use:
 
@@ -42,7 +43,6 @@ https://github.com/kikitux/packer-oraclelinux-ovf/releases
 
 There is a packer box for oracle-xe database (Express)
 
-download `oracle-xe` 11.2 rpm and place it on `sw/oracle-xe-11.2.0-1.0.x86_64.rpm`
 
 using packer, we will create a local vagrant box `xe.box` with our rpm installed.
 
