@@ -1,8 +1,13 @@
-before_install:
+language: generic
+install:
 - mkdir -p ~/bin
 - cd ~/bin
-- curl -o packer.zip https://releases.hashicorp.com/packer/1.0.3/packer_1.0.3_linux_amd64.zip
-- unzip packer_1.0.3_linux_amd64.zip
+- echo will download packer ${PACKERVER}
+- curl -o packer.zip https://releases.hashicorp.com/packer/${PACKERVER}/packer_${PACKERVER}_linux_amd64.zip
+- unzip packer.zip
 - chmod +x packer
+- cd -
+before_script:
+- touch sw/oracle-xe-11.2.0-1.0.x86_64.rpm
 script:
 - for template in *.json ; do ~/bin/packer validate ${template}; done
