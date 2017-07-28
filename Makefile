@@ -13,5 +13,8 @@ all: $(ALLBOX)
 clean:
 	-rm $(ALLBOX)
 
-cleanall: clean
+cleanall: clean removebox
 	-rm packer_cache/*ova
+
+removebox:
+	-@for BOX in $(ALLBOX) ; do vagrant box remove -f $${BOX%%.box} ; done

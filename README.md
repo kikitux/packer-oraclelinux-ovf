@@ -8,7 +8,23 @@ requirements:
 - [packer](https://packer.io)
 - [vagrant](https://vagrantup.com)
 
-how to use:
+## how to use:
+
+### Make
+
+A makefile is provided to help with different tasks.
+
+`make` will build all the boxes from template.
+
+`make clean` will remove the `file.box`
+
+`make cleanall` will remove the `file.box` and the download ova from `packer_cache`
+
+`make removebox` will remove the boxes from vagrant
+
+
+### Manually
+
 
 ```
 packer build oraclelinux7.json
