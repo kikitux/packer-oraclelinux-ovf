@@ -86,3 +86,29 @@ this will:
 - run all the test
 
 Sample run [log here](https://gist.github.com/kikitux/01642587d88a54137724546e39cf24cb)
+
+## cx_Oracle_release
+
+Using the same `xe` box, there is a sample python script using cx_Oracle from release.
+
+### Packer
+```
+packer build xe.json
+```
+
+### Vagrant
+
+on first vagrant up, our db will be configured.
+
+```
+cd vagrant/cx_Oracle_release
+vagrant up
+```
+
+this will:
+- configure xe database
+- Install python2.7 + pip
+- Upgrade pip
+- Install cx_Oracle python
+- run our sample app
+
