@@ -1,0 +1,7 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "xe"
+  config.vm.box_url = "../../xe.box"
+  config.vm.hostname = "odpi"
+  config.vm.provider "virtualbox"
+  config.vm.provision "shell", path: "provision/script.sh"
+end
