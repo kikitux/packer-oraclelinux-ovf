@@ -36,6 +36,7 @@
     {
       "type": "shell",
       "execute_command": "sudo sh '{{ .Path }}'",
+      "expect_disconnect": true,
       "pause_before": "1s",
       "inline": [
         "yum update -y kernel*",
